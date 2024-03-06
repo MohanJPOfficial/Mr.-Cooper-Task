@@ -10,12 +10,16 @@ import com.mohanjp.mrcoopertask.presentation.login.LoginScreen
 
 @Composable
 fun NavGraph(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    isUserAuthenticated: Boolean
 ) {
 
     NavHost(
         navController = navHostController,
-        startDestination = Screen.LOGIN.route
+        startDestination = if(isUserAuthenticated)
+            Screen.HOME.route
+        else
+            Screen.LOGIN.route
     ) {
         composable(
             Screen.LOGIN.route
