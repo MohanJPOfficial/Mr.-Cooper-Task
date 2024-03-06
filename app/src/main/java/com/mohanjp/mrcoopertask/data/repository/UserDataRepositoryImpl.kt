@@ -1,10 +1,12 @@
 package com.mohanjp.mrcoopertask.data.repository
 
+import com.mohanjp.mrcoopertask.data.mappers.toUserData
 import com.mohanjp.mrcoopertask.data.source.local.db.AppDB
 import com.mohanjp.mrcoopertask.data.source.local.entitiy.UserDataEntity
 import com.mohanjp.mrcoopertask.data.source.local.sample.SampleUserData
 import com.mohanjp.mrcoopertask.data.source.local.sharedpreferences.SharedPreferencesHelper
 import com.mohanjp.mrcoopertask.domain.model.StoreRatingsRequest
+import com.mohanjp.mrcoopertask.domain.model.UserData
 import com.mohanjp.mrcoopertask.domain.model.UserValidateRequest
 import com.mohanjp.mrcoopertask.domain.repository.UserDataRepository
 import java.util.UUID
@@ -50,7 +52,14 @@ class UserDataRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getUserData(): UserData? {
+        return appDB.userDao.getUserData()?.toUserData()
+    }
+
     override suspend fun storeRatings(storeRatingsRequest: StoreRatingsRequest) {
+
+        println("store ratings Req >> $storeRatingsRequest")
+
         appDB.userDao.storeRatings(
             ratings = storeRatingsRequest.ratings,
             userId = storeRatingsRequest.userId

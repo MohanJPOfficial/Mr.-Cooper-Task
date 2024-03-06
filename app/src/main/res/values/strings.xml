@@ -6,4 +6,7 @@
     <string name="login_screen">Login Screen</string>
     <string name="home_screen">Home Screen</string>
     <string name="empty_field_error_message">The fields cannot be empty</string>
+    <string name="ok">ok</string>
+    <string name="maybe_later">Maybe later</string>
+    <string name="kindly_rate_the_app">Kindly Rate the app</string>
 </resources>

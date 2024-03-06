@@ -11,20 +11,44 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mohanjp.mrcoopertask.R
+import com.mohanjp.mrcoopertask.presentation.home.components.RatingsDialog
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    viewModel: HomeScreenViewModel = hiltViewModel(),
     navigateToNextScreen: () -> Unit
 ) {
 
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     val snackBarHostState = remember {
         SnackbarHostState()
+    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collectLatest { uiEvent ->
+            when(uiEvent) {
+                is HomeScreenViewModel.UiEvent.ShowSnackBar -> {
+                    snackBarHostState.showSnackbar(
+                        message = uiEvent.message
+                    )
+                }
+                HomeScreenViewModel.UiEvent.NavigateToNextScreen -> {
+                    navigateToNextScreen()
+                }
+            }
+        }
     }
 
     Scaffold(
@@ -43,6 +67,19 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center
         ) {
 
+            if(uiState.needToShowDialog) {
+                RatingsDialog (
+                    dismissDialog = {
+                        viewModel.uiAction(HomeScreenViewModel.UiAction.RatingsCancelButtonClick)
+                    },
+                    okButtonClick = { ratings ->
+                        viewModel.uiAction(HomeScreenViewModel.UiAction.RatingsOkButtonClick(ratings))
+                    },
+                    maybeButtonClick = {
+                        viewModel.uiAction(HomeScreenViewModel.UiAction.RatingsCancelButtonClick)
+                    }
+                )
+            }
         }
     }
 }

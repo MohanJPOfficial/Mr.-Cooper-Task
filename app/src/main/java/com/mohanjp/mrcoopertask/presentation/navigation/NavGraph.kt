@@ -21,14 +21,20 @@ fun NavGraph(
             Screen.LOGIN.route
         ) {
             LoginScreen {
-                navHostController.navigate(Screen.HOME.route)
+                navHostController.navigate(Screen.HOME.route) {
+                    popUpTo(Screen.LOGIN.route) {
+                        inclusive = true
+                    }
+                }
             }
         }
 
         composable(
             Screen.HOME.route
         ) {
-            HomeScreen()
+            HomeScreen {
+                navHostController.navigate(Screen.DETAIL.route)
+            }
         }
 
         composable(

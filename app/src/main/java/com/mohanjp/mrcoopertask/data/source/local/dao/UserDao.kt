@@ -18,7 +18,7 @@ interface UserDao {
     @Query("SELECT * FROM ${UserDataTable.TABLE_NAME}")
     suspend fun getUserData(): UserDataEntity?
 
-    @Query("UPDATE ${UserDataTable.TABLE_NAME} SET ${UserDataTable.Column.RATINGS} = :ratings AND ${UserDataTable.Column.IS_RATED} = 1 where ${UserDataTable.Column.ID} = :userId")
+    @Query("UPDATE ${UserDataTable.TABLE_NAME} SET ${UserDataTable.Column.RATINGS} = :ratings, ${UserDataTable.Column.IS_RATED} = 1 where ${UserDataTable.Column.ID} = :userId")
     suspend fun storeRatings(ratings: Int, userId: String)
 
     @Query("DELETE FROM ${UserDataTable.TABLE_NAME}")

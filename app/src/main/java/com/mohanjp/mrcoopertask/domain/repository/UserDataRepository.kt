@@ -1,6 +1,7 @@
 package com.mohanjp.mrcoopertask.domain.repository
 
 import com.mohanjp.mrcoopertask.domain.model.StoreRatingsRequest
+import com.mohanjp.mrcoopertask.domain.model.UserData
 import com.mohanjp.mrcoopertask.domain.model.UserValidateRequest
 
 interface UserDataRepository {
@@ -10,4 +11,6 @@ interface UserDataRepository {
     suspend fun validateUser(userValidateRequest: UserValidateRequest): Boolean
 
     suspend fun storeRatings(storeRatingsRequest: StoreRatingsRequest)
+
+    suspend fun getUserData(): UserData?
 }
