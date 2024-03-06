@@ -8,5 +8,5 @@ fun UserDataEntity.toUserData() = UserData(
     username = username,
     isRated = isRated,
     ratings = ratings,
-    pickedImagePath = null
+    pickedImagePath = pickedImage
 )

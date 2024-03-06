@@ -40,7 +40,13 @@ fun NavGraph(
         composable(
             Screen.DETAIL.route
         ) {
-            DetailScreen()
+            DetailScreen {
+                navHostController.navigate(Screen.LOGIN.route) {
+                    popUpTo(Screen.DETAIL.route) {
+                        inclusive = true
+                    }
+                }
+            }
         }
     }
 }

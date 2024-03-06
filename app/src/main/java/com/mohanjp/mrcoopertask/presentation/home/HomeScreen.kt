@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mohanjp.mrcoopertask.R
 import com.mohanjp.mrcoopertask.data.source.remote.ServerType
 import com.mohanjp.mrcoopertask.presentation.home.components.DropDownMenu
+import com.mohanjp.mrcoopertask.presentation.home.components.LoadingDialog
 import com.mohanjp.mrcoopertask.presentation.home.components.RatingsDialog
 import kotlinx.coroutines.flow.collectLatest
 
@@ -74,6 +75,9 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+
+            if(uiState.isLoading)
+                LoadingDialog()
 
             if(uiState.needToShowDialog) {
                 RatingsDialog (
