@@ -2,6 +2,8 @@ package com.mohanjp.mrcoopertask.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mohanjp.mrcoopertask.domain.model.UserValidateRequest
+import com.mohanjp.mrcoopertask.domain.repository.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-
+    private val repository: UserDataRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -31,6 +33,15 @@ class LoginViewModel @Inject constructor(
 
     init {
         uiAction = ::onUiAction
+
+        checkUserIsAuthenticated()
+    }
+
+    private fun checkUserIsAuthenticated() = viewModelScope.launch {
+
+        if(repository.isUserAuthenticated)
+            sendEvent(UiEvent.NavigateToNextScreen)
+
     }
 
     private fun onUiAction(uiAction: UiAction) {
@@ -55,8 +66,33 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun validateInternal() {
-        //TODO
+    private fun validateInternal() = viewModelScope.launch {
+        val username = uiState.value.typedUsername
+        val password = uiState.value.typedPassword
+
+        if(username.isEmpty() || password.isEmpty()) {
+
+            sendEvent(
+                UiEvent.ShowSnackBar(
+                    message = "The fields cannot be empty"
+                )
+            )
+
+            return@launch
+        }
+
+        val validateUserRequest = UserValidateRequest(
+            username = username,
+            password = password
+        )
+
+        val isSuccess = repository.validateUser(validateUserRequest)
+
+        if(isSuccess) {
+            sendEvent(UiEvent.ShowSnackBar("Login Success"))
+            sendEvent(UiEvent.NavigateToNextScreen)
+        } else
+            sendEvent(UiEvent.ShowSnackBar("Incorrect username or password"))
     }
 
     private fun sendEvent(event: UiEvent) = viewModelScope.launch {
@@ -71,6 +107,7 @@ class LoginViewModel @Inject constructor(
 
     sealed interface UiEvent {
         data object NavigateToNextScreen: UiEvent
+        data class ShowSnackBar(val message: String): UiEvent
     }
 
     data class UiState(

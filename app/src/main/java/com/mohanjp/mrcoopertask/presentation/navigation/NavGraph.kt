@@ -20,7 +20,9 @@ fun NavGraph(
         composable(
             Screen.LOGIN.route
         ) {
-            LoginScreen()
+            LoginScreen {
+                navHostController.navigate(Screen.HOME.route)
+            }
         }
 
         composable(
