@@ -2,6 +2,7 @@ package com.mohanjp.mrcoopertask.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mohanjp.mrcoopertask.data.source.remote.ServerType
 import com.mohanjp.mrcoopertask.domain.model.StoreRatingsRequest
 import com.mohanjp.mrcoopertask.domain.repository.UserDataRepository
 import com.mohanjp.mrcoopertask.presentation.util.nullAsEmpty
@@ -48,6 +49,19 @@ class HomeScreenViewModel @Inject constructor(
             }
             UiAction.RatingsCancelButtonClick -> {
                 dismissRatingsDialog()
+            }
+
+            is UiAction.OnServerItemSelected -> {
+                println("${uiAction.serverType}")
+                _uiState.update {
+                    it.copy(
+                        serverType = uiAction.serverType
+                    )
+                }
+            }
+
+            UiAction.OnSubmitButtonClick -> {
+
             }
         }
     }
@@ -97,11 +111,14 @@ class HomeScreenViewModel @Inject constructor(
 
     sealed interface UiAction {
         data class RatingsOkButtonClick(var ratings: Int): UiAction
+        data class OnServerItemSelected(var serverType: ServerType): UiAction
         data object RatingsCancelButtonClick: UiAction
+        data object OnSubmitButtonClick: UiAction
     }
 
     data class UiState(
         val needToShowDialog: Boolean = false,
-        val userId: String = ""
+        val userId: String = "",
+        val serverType: ServerType = ServerType.SERVER1
     )
 }

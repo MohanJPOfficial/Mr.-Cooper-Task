@@ -9,4 +9,6 @@
     <string name="ok">ok</string>
     <string name="maybe_later">Maybe later</string>
     <string name="kindly_rate_the_app">Kindly Rate the app</string>
+    <string name="select_server_type">Select server type</string>
+    <string name="submit">Submit</string>
 </resources>
