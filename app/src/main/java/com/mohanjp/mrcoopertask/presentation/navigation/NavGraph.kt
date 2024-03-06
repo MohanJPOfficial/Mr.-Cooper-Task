@@ -46,7 +46,7 @@ fun NavGraph(
         ) {
             DetailScreen {
                 navHostController.navigate(Screen.LOGIN.route) {
-                    popUpTo(Screen.DETAIL.route) {
+                    popUpTo(navHostController.graph.id) {
                         inclusive = true
                     }
                 }
